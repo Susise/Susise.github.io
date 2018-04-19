@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>指针、野指针、空指针、地址</title>
+  <meta name="description" content="1、什么是指针？">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="指针、野指针、空指针、地址">
+  <meta name="twitter:description" content="1、什么是指针？">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="指针、野指针、空指针、地址">
+  <meta property="og:description" content="1、什么是指针？">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/%E9%87%8E%E6%8C%87%E9%92%88/">
+  <link rel="alternate" type="application/rss+xml" title="Susise" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Susise 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Susise logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Susise" class="blog-button">Susise</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">To be the one that you want to be</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Love.Action.Hope.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="https://github.com/Susise" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/p/1005055503228222" title="@p/1005055503228222 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Susise" title="@Susise 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:s_qiaoqiao@163.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-04-19 16:00:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-04-19</time> &#8226; <span class="post-meta__tags tags"></span>
+    </div>
+    <h1 class="post-title">指针、野指针、空指针、地址</h1>
+  </header>
+
+  <section class="post">
+    <p>1、什么是指针？</p>
+
+<p>指针本身具有独立的数据类型，可以用这个类型声明 一个指针变量并赋值，这个指针变量是用来保存某个内存的地址。指针变量本身也是占有内存的，这个内存使用来存写地址数据的。（指针变量是用来存储地址的，地址是一串数字。）</p>
+
+<p>指针是用来保存地址的，但是指针有类型，比如说int 型指针，char型指针，float 型指针，double 型指针等，指针变量和其他变量是一样的。指针的类型 表明，你希望从存储的地址里面取出来的数据，或者存进去的数据，是什么类型的。</p>
+
+<p>指针一定只能保存地址，保存地址使用的是指针变量。 <code class="highlighter-rouge">指针变量必须初始化</code>，否则不知道指向哪个地址。并且可以通过这个地址来操作对应的内容。只要知道了一个变量的内存地址，就可以通过指针来操作这块内存空间。指针在C语言中占8个字节。</p>
+
+<p>系统类型可以在编译时进行类型检测，让编译器帮助避免犯错，不然还得等到程序运行的时候才能发现。类型可以指明指针这块内存地址所保存的二进制数据。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sr">//</span><span class="mi">1</span><span class="err">、定义一个</span><span class="n">int</span> <span class="err">型常量</span><span class="n">a</span><span class="err">，</span><span class="nb">p</span> <span class="err">就是用来存储</span><span class="n">a</span><span class="err">的地址的，</span><span class="o">&amp;</span><span class="n">a</span><span class="err">就是取</span><span class="n">a</span><span class="err">的地址。</span><span class="n">int</span> <span class="o">*</span> <span class="err">表示指针变量</span><span class="nb">p</span> <span class="err">是</span><span class="n">int</span><span class="err">型指针，里面存储的地址所指向的数据是</span><span class="n">int</span><span class="err">型</span>
+
+<span class="n">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="n">int</span><span class="o">*</span> <span class="nb">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">;</span><span class="sr">//</span> <span class="n">int</span><span class="o">*</span> <span class="nb">p</span> <span class="err">等价于</span> <span class="n">int</span> <span class="o">*</span><span class="nb">p</span>  <span class="o">*</span> <span class="err">在表示指向的时候，</span><span class="o">*</span><span class="err">只是说明这个变量是指针，对于操作的时候，</span><span class="o">*</span><span class="err">表示操作地址。</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"a = %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,(</span><span class="n">int</span><span class="p">)</span> <span class="n">sizeof</span><span class="p">(</span><span class="nb">p</span><span class="p">));</span><span class="sr">//</span> <span class="n">p</span><span class="err">变量占</span><span class="mi">8</span><span class="err">个字节，说明指针在</span><span class="no">C</span><span class="err">语言中占</span> <span class="mi">8</span><span class="err">个字节</span>
+
+
+
+<span class="sr">//</span><span class="mi">2</span><span class="err">、</span> <span class="err">指针变量只能保存地址</span>
+
+<span class="n">int</span> <span class="o">*</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span><span class="sr">//</span><span class="err">错误，指针变量只能保存地址</span>  <span class="o">&amp;</span><span class="n">a</span>
+
+<span class="n">int</span> <span class="o">*</span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span><span class="sr">//</span><span class="err">错误，指针变量只能保存地址</span>  <span class="o">&amp;</span><span class="n">a</span>
+
+
+
+<span class="sr">//</span><span class="mi">3</span><span class="err">、</span> <span class="n">z</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">b</span> <span class="err">以下打印的全是</span><span class="n">b</span><span class="err">的地址</span>
+<span class="n">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="n">int</span> <span class="o">*</span><span class="n">z</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">;</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"%p</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"%p</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">z</span><span class="p">);</span>
+
+
+<span class="sr">//</span><span class="mi">4</span><span class="err">、声明指针变量时候的</span><span class="o">*</span> <span class="err">和操作地址的时候的</span> <span class="o">*</span> <span class="err">的区别</span> <span class="o">.</span><span class="err">一个是定义，一个是寻找并操作</span><span class="p">.</span> <span class="nf">*</span><span class="nb">p</span> <span class="err">指的是</span> <span class="err">找到这块地址里面对应的数据，并进行操作，这里</span> <span class="o">*</span><span class="nb">p</span> <span class="err">是寻找并操作。</span>
+<span class="n">int</span>  <span class="n">u</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="n">int</span> <span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">;</span>
+
+<span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"指针w 的占多少字节 ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,(</span><span class="n">int</span><span class="p">)</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">w</span><span class="p">));</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"u ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">u</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"&amp;u的地址 ---- %p</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">u</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"w ---- %p</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"*w ---- %p</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">*</span><span class="n">w</span><span class="p">);</span>
+
+<span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">;</span><span class="sr">//</span><span class="err">这个是错误的，</span><span class="o">*</span><span class="n">w</span><span class="err">代表寻找</span><span class="n">w</span> <span class="err">存放的地址对应的数据，并操作，不能给他赋值</span> <span class="err">地址。</span>
+
+<span class="sr">//</span><span class="mi">5</span><span class="err">、利用指针来接收变量的地址</span>
+
+<span class="n">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="n">change</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"m ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+
+<span class="sr">//</span><span class="mi">6</span><span class="err">、取地址符</span> <span class="o">&amp;</span><span class="err">取地址，指针保存地址</span>
+
+<span class="n">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="n">int</span> <span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">;</span><span class="sr">//</span><span class="n">c</span> <span class="err">保存</span><span class="n">d</span><span class="err">的地址</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"*c ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">);</span><span class="sr">//</span><span class="err">找到</span> <span class="o">*</span><span class="n">c</span> <span class="err">对应的地址</span> <span class="err">里面所保存的数据</span>
+
+<span class="sr">//</span><span class="err">修改指针指向的那块内存空间</span>
+<span class="o">*</span><span class="n">c</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s2">"*c ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">);</span><span class="sr">//</span><span class="err">找到</span> <span class="o">*</span><span class="n">c</span> <span class="err">对应的地址</span> <span class="err">里面所保存的数据</span></code></pre></figure>
+
+<p>2、什么是空指针？
+没有存储地址的指针就称为空指针。</p>
+
+<p>3、什么是野指针？</p>
+
+<p>野指针不是NULL 指针，是指向“垃圾”内存（不可用内存）的指针，野指针非常危险。</p>
+
+<p><a href="https://github.com/Susise/SusisePointer">SusisePointerProject</a></p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/just-be-sad/" title="link to Just be sad">Just be sad</a></h2>
+       <p class="excerpt">2018年初，我才意识到三年开发经验的我，竟然渣到这个地步了。看了castie 的败北感悟之后。听了松哥给我的教诲，一心要进入大公司，做一个高级的coder。去膜拜了某度大楼，给自己心里打气。在松哥的帮助下，收到了著名导航软件某徳公司的电话面试通知。可是前一天我基本上就把自己否定了，也没准备面试资料。心里瑟瑟发抖，那可是某徳，我一定通不过。但是为了不辜负松哥对我的教诲，硬着脸皮接了面试电话。果然，结局总在意料之中，问了几个问题，我就泄气了。只能回答一句或者两句，或者是，或者否，或者我不清楚...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-19 14:29:24 +0900" class="post-list__meta--date date">2018-04-19</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/just-be-sad/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/04/%E9%87%8E%E6%8C%87%E9%92%88/";
+        this.page.identifier = "/2018/04/%E9%87%8E%E6%8C%87%E9%92%88/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-19 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
