@@ -1,6 +1,6 @@
 # Basic
 title: Susise
-#subtitle: A blog-orientation theme for Jekyll
+subtitle: To be one who you want to be
 #welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">Download the theme</a>
 description: Love.Action.Hope.
 creator: <a href="http://onev.cat">@onevcat</a>
@@ -22,7 +22,7 @@ blog_button:
 
 # Navigation buttons in the front page.
 nav:
-    - {title: Projects, description: My Projects, url: 'http://project.onevcat.com'}
+    - {title: Projects, description: My Projects, url: 'https://github.com/Susise'}
     # - {title: Another Button, description: A button, url: 'http://example.com'}
 
 # Pagination
@@ -37,11 +37,11 @@ comment:
     
 # Social
 social:
-    weibo: onevcat
-    github: onevcat
-    twitter: onevcat
-    gplus: 107108267983477358170
-    mail: onev@onevcat.com
+    weibo: p/1005055503228222
+    github: Susise
+#    twitter: onevcat
+#    gplus: 107108267983477358170
+    mail: s_qiaoqiao@163.com
 
 # Google Analytics
 ga:
