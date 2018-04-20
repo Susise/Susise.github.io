@@ -144,7 +144,7 @@
 
 <p>指针是用来保存地址的，但是指针有类型，比如说int 型指针，char型指针，float 型指针，double 型指针等，指针变量和其他变量是一样的。指针的类型 表明，你希望从存储的地址里面取出来的数据，或者存进去的数据，是什么类型的。</p>
 
-<p>指针一定只能保存地址，保存地址使用的是指针变量。 <code class="highlighter-rouge">指针变量必须初始化</code>，否则不知道指向哪个地址。并且可以通过这个地址来操作对应的内容。只要知道了一个变量的内存地址，就可以通过指针来操作这块内存空间。指针在C语言中占8个字节。</p>
+<p>指针一定只能保存地址，保存地址使用的是指针变量。 <code class="highlighter-rouge">指针变量必须初始化</code>，否则不知道指向哪个地址，成为野指针。任何指针被创建时不会自动成为null指针（空指针），它会乱指一气。所以要么设置为NULL，要么指向合法内存。指针被release后，并不是一个合法的指针，只是把指针所指的内存给释放掉了，并没有把指针本身干掉，用if (p != NULL) 进行防错处理，不能起到防错作用，因为这时候指针不是空指针，也不知想合法的内存块，是一个野指针。可以通过这个地址来操作对应的内容。只要知道了一个变量的内存地址，就可以通过指针来操作这块内存空间。指针在C语言中占8个字节。</p>
 
 <p>系统类型可以在编译时进行类型检测，让编译器帮助避免犯错，不然还得等到程序运行的时候才能发现。类型可以指明指针这块内存地址所保存的二进制数据。</p>
 
@@ -216,12 +216,39 @@
 
 <span class="nb">printf</span><span class="p">(</span><span class="s2">"*c ---- %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="o">*</span><span class="n">c</span><span class="p">);</span><span class="sr">//</span><span class="err">找到</span> <span class="o">*</span><span class="n">c</span> <span class="err">对应的地址</span> <span class="err">里面所保存的数据</span></code></pre></figure>
 
-<p>2、什么是空指针？
-没有存储地址的指针就称为空指针。</p>
+<p>2、什么是空指针？</p>
+
+<p>没有存储地址的指针就称为空指针（NULL指针）。空指针就是被赋值为0的指针，在没有被初始化之前，其值为0。</p>
 
 <p>3、什么是野指针？</p>
 
 <p>野指针不是NULL 指针，是指向“垃圾”内存（不可用内存）的指针，野指针非常危险。</p>
+
+<p>指针所指向的内存已经被回收，对象已经被释放，但是对该指针没有做任何修改，以至于该指针仍然指向已经回收的内存地址，此情况下该指针便称为野指针。野指针，<code class="highlighter-rouge">随机性强</code>，<code class="highlighter-rouge">难以定位</code>。</p>
+
+<p>随机性强：有人说，野指针是crash界的半壁江山。内存被释放不代表内存会立刻被覆写或者数据受到破坏，这时候访问这块内存不一定会出错。多线程带来了复杂的应用运行环境，在这个环境下，没加保护的数据可能是致命的。设计不严谨的代码也是造成野指针异常的原因。</p>
+
+<p>难以定位：野指针是C语言层面，往往只能获取到系统栈信息，单单是定位错误代码已经很难了，重现修复更难。</p>
+
+<p>怎么解决野指针： 定位野指针，<code class="highlighter-rouge">Scheme --&gt; Edit Scheme --&gt; Diagnostics --&gt; objective --&gt; c的Enable zombie objects</code>。使用僵尸对象，所谓僵尸对象，就是将释放的对方标记为僵尸，系统不会回收这些对象的内存，并让这些内存无法被重用，因而无法被覆写。在启用“僵尸对象”后，在调试期间，如果对象被释放了，会被转化为“僵尸对象”。如果再向对象发送消息，则对应的“僵尸对象”会受到这个消息，并抛出异常。异常信息中会明确描述被释放的对象，以及接受的是哪个消息。</p>
+
+<p>使用野指针访问僵尸对象，有时候会出问题，有时候不会出问题。当野指针指向的将是对象所占用的空间还没有分配给别人的时候，这个时候其实是可以访问的，因为对象的数据还在。当野指针指向的对象所占用的空间分配给别人的时候，这个时候再访问就会出问题。不允许野指针去访问僵尸对象。</p>
+
+<p>可以开启僵尸对象的检测，但是不要默认开启，因为一旦开启，每次通过指针访问对象的时候，都回去检查指针指向的对象是否为僵尸对象，影响效率。</p>
+
+<p>4、避免僵尸对象报错，当一个指针变为野指针以后，把这个指针的值设置为nil。nil 可以发送任何消息，不会崩溃。</p>
+
+<p>5、关于内存回收的本质</p>
+
+<p>申请一块空间，实际上是向系统申请1块别人不再使用的空间。</p>
+
+<p>释放一块空间，指的是占用的空间不再使用，这个时候系统可以分配给别人去使用。在这个空间费赔给别人之前，数据还是存在的。oc对象释放以后，表示oc对象占用的空间可以分配给别人，但是在分配给别人之前，这个空间仍然存在，对象的数据仍然存在。</p>
+
+<p>6、产生野指针的原因 (暂时知道的先添加，后续理解多了再添加)</p>
+
+<p>访问已释放的对象。</p>
+
+<p>__unsafe_unretained</p>
 
 <p><a href="https://github.com/Susise/SusisePointer">SusisePointerProject</a></p>
 
@@ -274,7 +301,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-19 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
         <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
     </footer>
 </section>
