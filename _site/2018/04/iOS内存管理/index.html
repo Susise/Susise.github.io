@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS - 内存管理</title>
+  <meta name="description" content="1、内存中五大区域">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS - 内存管理">
+  <meta name="twitter:description" content="1、内存中五大区域">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS - 内存管理">
+  <meta property="og:description" content="1、内存中五大区域">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+  <link rel="alternate" type="application/rss+xml" title="Susise" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Susise 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Susise logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Susise" class="blog-button">Susise</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">To be the one that you want to be</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Love.Action.Hope.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="https://github.com/Susise" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/p/1005055503228222" title="@p/1005055503228222 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Susise" title="@Susise 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:s_qiaoqiao@163.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-04-20 10:41:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-04-20</time> &#8226; <span class="post-meta__tags tags"></span>
+    </div>
+    <h1 class="post-title">iOS - 内存管理</h1>
+  </header>
+
+  <section class="post">
+    <p>1、内存中五大区域</p>
+
+<p>栈区（stack）：储存局部变量、函数的参数值，当期作用域执行完毕之后，就会被系统立即收回，由编译器自动分配释放，其操作方式类似于数据结构中的栈，栈内存分配运算内置于指令集，效率很高，但是分配的内存容量有限，比如iOS中栈区的大小是2M。</p>
+
+<p>堆区（heap）：（就是通过new、malloc、realloc 分配的内存块，他们的释放编译器不去管，有我们的引用程序去释放，如果应用程序没有释放掉，操作系统会自动回收，分配方式类似于链表）存放OC对象，手动申请的空间，手动释放（ARC自动释放）。</p>
+
+<p>静态区：初始化的全局变量和静态变量在一块区域，未初始化的全局变量和未初始化的静态变量在相邻的另一块区域，程序结束后，由系统释放。</p>
+
+<p>常量区：常量存储在这里，不允许被修改。</p>
+
+<p>代码段：代码，函数体的二进制代码，直到程序结束才会被立即收回。</p>
+
+<p>（对于栈来说，内存管理由编译器释放，对于堆来说，释放工作由程序员释放；栈的空间大小比堆小很多；栈是机器系统提供的数据结构，计算机会在底层对栈提供支持，所以分配效率比堆高；栈中存储的变量出了作用域就无效了，比如下面的函数，出了}变量i 和 j 的作用域已经结束了，编译器就会自动放掉i 和 j 所占的内存（理解好作用域就理解了栈区的内存分配），而堆由于是程序员进行控制释放的，变量的生命周期可以延长）</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="nb">print</span> <span class="p">{</span>
+<span class="n">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="n">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">"i+j = %d"</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">));</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>2、除了堆区存储的数据，都是系统自动释放的。堆区中的OC对象，是不会主动释放的，如果不释放，在程序结束时候才释放。</p>
+
+<p>3、引用计数：每个oc对象都有一个属性，叫做引用计数，retainCount。当新的引用指向对象，那么这个对象的引用计数+1，少一次引用，引用计数-1，当引用计数为0的时候，代表这个对象被释放了，系统自动回收掉此对象，回收这个对象的同时，自动调用这个对象的dealloc方法。</p>
+
+<p>retain  + 1</p>
+
+<p>release -1</p>
+
+<p>4、MRC 和ARC的区别就是是否手动管理引用计数。ARC 是基于MRC的。</p>
+
+<p>5、内存管理原则，谁创建，谁释放。</p>
+
+<p>6、野指针。在C中，声明一个指针变量，没有为这个指针变量初始化，那么这个指针变量的值就是一个垃圾值，指向随机的一块空间，那么我们叫做野指针。在OC中，一个指针指向的对象被释放了，那么这个指针叫做野指针。怎么判断，遇着预防野指针，不好判断。只能靠良好的编程习惯，避免。</p>
+
+<p>7、MRC下管理需要注意：避免提前释放；避免过度释放；多个模块操作同一个对象，不知道最后由谁释放；多线程操作，不确定哪个线程最后使用完毕。ARC 下可能带来的内存泄漏的：循环引用</p>
+
+<p>9、assign 和weak 有什么区别</p>
+
+<p>weak 之修饰对象，assign 修饰对象、基本数据类型。当需要修饰对象类型时，MRC时代使用unsafe_unretained。当然，unsafe_unretained也可能产生野指针，所以它名字是”unsafe_”。</p>
+
+<p>assign 修饰的对象，引用计数+1，weak不变。对象销毁后，weak修饰的属性自动设置为nil，最大的好处就是之后发送的消息都不会因为对象销毁而出错，assign 修饰的属性，并不会自动变为nil，形成野指针，所以再调用这个对象，发送消息会导致crash。assign 修饰基本数据类型是安全的，不会造成这个问题，因为assign 修饰基本数据类型，没有引用计数了，值类型会被放入栈中，遵循先进后出的原则，由系统负责栈内存。而引用放在堆中，需要我们手动管理内存，或者ARC管理。</p>
+
+<p>weak 修饰delegate 和block 等引用类型，不会造成野指针问题，也不会循环引用，非常安全。</p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/" title="link to iOS - 面试题">iOS - 面试题</a></h2>
+       <p class="excerpt">面试题 一基础1、为什么说Objective-C是 动态的语言 ?动态加载：比如2x、3x图片，根据机型动态加载图片动态类型：运行时再决定对象的类型，简单说就是id类型。任何对象都可以被id指针所指，只有在运行时，才能决定是什么类型。像内置的明确的基本类型都属于静态类型 （int NSString等），静态类型在编译的时候就能被识别出来，所以，若程序发生了类型不对应，编译器就会发出警告。而动态类型就编译器编译的时候是不能被识别的，要等到运行时(runtime)，即程序运行的时候才会根据语境...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-20 11:34:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS%E9%87%8E%E6%8C%87%E9%92%88/" title="link to iOS - 指针、野指针、空指针、地址">iOS - 指针、野指针、空指针、地址</a></h2>
+       <p class="excerpt">1、什么是指针？指针本身具有独立的数据类型，可以用这个类型声明 一个指针变量并赋值，这个指针变量是用来保存某个内存的地址。指针变量本身也是占有内存的，这个内存使用来存写地址数据的。（指针变量是用来存储地址的，地址是一串数字。）指针是用来保存地址的，但是指针有类型，比如说int 型指针，char型指针，float 型指针，double 型指针等，指针变量和其他变量是一样的。指针的类型 表明，你希望从存储的地址里面取出来的数据，或者存进去的数据，是什么类型的。指针一定只能保存地址，保存地址使用...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-19 16:00:00 +0900" class="post-list__meta--date date">2018-04-19</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS%E9%87%8E%E6%8C%87%E9%92%88/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/04/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/";
+        this.page.identifier = "/2018/04/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
