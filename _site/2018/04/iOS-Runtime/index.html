@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS - Runtime 的理解</title>
+  <meta name="description" content="Runtime">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS - Runtime 的理解">
+  <meta name="twitter:description" content="Runtime">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS - Runtime 的理解">
+  <meta property="og:description" content="Runtime">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/iOS-Runtime/">
+  <link rel="alternate" type="application/rss+xml" title="Susise" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Susise 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Susise logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Susise" class="blog-button">Susise</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">To be the one that you want to be</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Love.Action.Hope.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="https://github.com/Susise" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/p/1005055503228222" title="@p/1005055503228222 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Susise" title="@Susise 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:s_qiaoqiao@163.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-04-20 17:41:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-04-20</time> &#8226; <span class="post-meta__tags tags"></span>
+    </div>
+    <h1 class="post-title">iOS - Runtime 的理解</h1>
+  </header>
+
+  <section class="post">
+    <p>Runtime</p>
+
+<p>1、什么是Runtime？</p>
+
+<p>Runtime 又叫运行时，是一套底层的C语言API，是iOS内部的核心之一，OC代码的底层都是基于它来实现的，最终都是转化成了Runtime的C语言代码。其中最主要的就是消息机制</p>
+
+<p>OC中一切都被设计成对象，我们都知道一个类被初始化成一个实例，这个实例是一个对象。实际上一个类本质上也是一个对象。</p>
+
+<p>为什么说oc是面向对象的动态语言？</p>
+
+<p>动态加载 例如2x 3x 图片</p>
+
+<p>动态类型，比如说id类型，在运行时才能确定到底是什么类型</p>
+
+<p>动态绑定，比如说，在编译时候并不能决定真正调用哪个函数，只有在真正运行的时候才能根据函数名称找到对应的函数来调用</p>
+
+<p>2、Runtime的运行机制</p>
+
+<p>OC代码在程序运行的过程中，最终都转换为runtime的C语言代码。</p>
+
+<p>3、Runtime的常见方法？</p>
+
+<p>发送消息</p>
+
+<p>objc_msgSend 只有对象才能发送消息，调用方法的本质就是发送消息，objc_msgSend([Person class], @selector(eat)); 发送消息的本质是，对象根据方法编号SEL去映射表查找对应的方法实现</p>
+
+<p>获取列表 - 属性列表 、方法列表、成员变量列表、协议列表</p>
+
+<p>unsigned int count;</p>
+
+<p>class_copyPropertyList([self class], &amp;count)   属性列表</p>
+
+<p>class_copyMethodList([self class], &amp;count)  方法列表</p>
+
+<p>class_copyIvarList([self class], &amp;count)  成员变量列表</p>
+
+<p>class_copyProtocolList([self class], &amp;count)  协议列表</p>
+
+<p>获取类方法、获取实例方法</p>
+
+<p>class_getClassMethod([self class], @selector(testClassMethod))  获取类方法</p>
+
+<p>class_getInstanceMethod([self class], @selector(testObjectMethod))  获取实例方法</p>
+
+<p>替换方法实现</p>
+
+<p>交换两个方法 — 当某个系统的方法不能满足需求的时候，在系统方法的需求上添加。例如，统计进入vc时间</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="no">Method</span> <span class="n">me1</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">meth1</span><span class="p">));</span>
+<span class="no">Method</span> <span class="n">me2</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">meth2</span><span class="p">));</span>
+<span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">me1</span><span class="p">,</span> <span class="n">me2</span><span class="p">);</span>
+
+ </code></pre></figure>
+
+<p>拦截调用、添加方法：再找不到调用方法，程序崩溃之前，有机会重写NSObject的四个方法来处理（其实拦截调用的恶原理就是动态添加方法）</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="n">class_addMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="no">NSSelectorFromString</span><span class="p">(</span><span class="err">@</span><span class="s2">"aaa"</span><span class="p">),</span> <span class="p">(</span><span class="no">IMP</span><span class="p">)</span><span class="n">aaa</span><span class="p">,</span> <span class="s2">"V@:"</span><span class="p">)</span>
+
+ </code></pre></figure>
+
+<ul>
+  <li>
+    <p>(BOOL )resolveInstanceMethod:(SEL)sel  //当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES</p>
+  </li>
+  <li>
+    <p>(BOOL)resolveClassMethod:(SEL)sel</p>
+  </li>
+</ul>
+
+<p>//后两个方法需要转发到其他的类处理</p>
+<ul>
+  <li>
+    <p>(id)forwardingTargetForSelector:(SEL)aSelector //将你调用的不存在的方法重定向到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target</p>
+  </li>
+  <li>
+    <p>(void)forwardInvocation:(NSInvocation *)anInvocation //将你调用的不存在的方法打包成NSInvocation传给你。做完你自己的处理后，调用invokeWithTarget:方法让某个target触发这个方法</p>
+  </li>
+</ul>
+
+<p>关联对象、动态添加属性 -  应用：给Category添加属性</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">static</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="s2">"name"</span><span class="p">;</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">setName</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nb">name</span><span class="p">{</span>
+<span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="no">OBJC_ASSOCIATION_COPY</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="o">-</span> <span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nb">name</span><span class="p">{</span>
+<span class="k">return</span> <span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>实现NSCoding的自动归档和解档</p>
+
+<p>如果有100个属性，就要写一百遍</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#import "Movie.h" </span>
+
+<span class="c1">#import &lt;objc/runtime.h&gt;</span>
+
+<span class="vi">@implementation</span> <span class="no">Movie</span> 
+
+<span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">encodeWithCoder</span><span class="p">:(</span><span class="no">NSCoder</span> <span class="o">*</span><span class="p">)</span><span class="n">encoder</span> <span class="p">{</span> 
+
+<span class="n">unsigned</span> <span class="n">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="no">Ivar</span> <span class="o">*</span><span class="n">ivars</span> <span class="o">=</span> <span class="n">class_copyIvarList</span><span class="p">([</span><span class="no">Movie</span> <span class="k">class</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+<span class="no">Ivar</span> <span class="n">ivar</span> <span class="o">=</span> <span class="n">ivars</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> 
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="nb">name</span> <span class="o">=</span> <span class="n">ivar_getName</span><span class="p">(</span><span class="n">ivar</span><span class="p">);</span>
+<span class="no">NSString</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="no">NSString</span> <span class="n">stringWithUTF8String</span><span class="ss">:name</span><span class="p">];</span> 
+<span class="nb">id</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">valueForKey</span><span class="ss">:key</span><span class="p">];</span>
+<span class="p">[</span><span class="n">encoder</span> <span class="n">encodeObject</span><span class="ss">:value</span> <span class="n">forKey</span><span class="ss">:key</span><span class="p">];</span> 
+<span class="p">}</span> 
+<span class="p">}</span> 
+<span class="o">-</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="n">initWithCoder</span><span class="p">:(</span><span class="no">NSCoder</span> <span class="o">*</span><span class="p">)</span><span class="n">decoder</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="k">super</span> <span class="n">init</span><span class="p">])</span> <span class="p">{</span>
+<span class="n">unsigned</span> <span class="n">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="no">Ivar</span> <span class="o">*</span><span class="n">ivars</span> <span class="o">=</span> <span class="n">class_copyIvarList</span><span class="p">([</span><span class="no">Movie</span> <span class="k">class</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">);</span> 
+<span class="k">for</span> <span class="p">(</span><span class="n">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+<span class="no">Ivar</span> <span class="n">ivar</span> <span class="o">=</span> <span class="n">ivars</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="nb">name</span> <span class="o">=</span> <span class="n">ivar_getName</span><span class="p">(</span><span class="n">ivar</span><span class="p">);</span> 
+<span class="no">NSString</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="no">NSString</span> <span class="n">stringWithUTF8String</span><span class="ss">:name</span><span class="p">];</span> 
+<span class="nb">id</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">decoder</span> <span class="n">decodeObjectForKey</span><span class="ss">:key</span><span class="p">];</span> 
+<span class="p">[</span><span class="nb">self</span> <span class="n">setValue</span><span class="ss">:value</span> <span class="n">forKey</span><span class="ss">:key</span><span class="p">];</span>    
+<span class="p">}</span>
+<span class="p">}</span> 
+<span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="vi">@end</span>
+
+ </code></pre></figure>
+
+<p>字典转模型</p>
+
+<p>字典转模型的方式</p>
+
+<p>（1） kvc</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="o">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="n">statusWithDict</span><span class="p">:(</span><span class="no">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">dict</span> <span class="p">{</span> 
+<span class="no">Status</span> <span class="o">*</span><span class="n">status</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">self</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> 
+<span class="p">[</span><span class="n">status</span> <span class="n">setValuesForKeysWithDictionary</span><span class="ss">:dict</span><span class="p">];</span>
+<span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>Kvc 转模型必须保证，模型中的属性和字典中的key 一一对应。如果不一致，就报 setvalue forundefinedKey 找不到key</p>
+
+<p>解决办法，是重写对象的setValue：forUndefinedKey 把系统的方法覆盖，就可以了</p>
+
+<p>（2）Runtime</p>
+
+<p>利用运行时，遍历模型中的所有属性，根据属性的属性名，去查找字典中的key，取出对应的值，给模型的属性赋值。</p>
+
+<p>4、Runtime的相关应用/具体实现/你在开发中用到的runtime</p>
+
+<p>导入头文件 #import &lt;objc/runtime.h&gt;</p>
+
+<p>MJExtention的底层实现 — 获取成员变量 - 赋值</p>
+
+<p>给分类添加属性</p>
+
+<p>在Category里面实现方法交换在系统方法的基础上加自定义功能- 方法交换 - 黑魔法</p>
+
+<p>字典转模型</p>
+
+<p>归档/解档</p>
+
+<p>如有需要遍历成员变量（变量属性、方法、协议）</p>
+
+<p>实现未定义的方法（这个不是很理解，没用过，没定义，会调用吗？）</p>
+
+<p>5、Runtime的数据结构</p>
+
+<p>相关定义</p>
+
+<p>typedef struct objc_method *Method; 方法</p>
+
+<p>typedef struct objc_ivar *Ivar; 成员变量</p>
+
+<p>typedef struct objc_category *Category; 类别</p>
+
+<p>typedef struct objc_property *objc_property_t ; 属性</p>
+
+<p>类</p>
+
+<p>struct objc_class {
+Class _Nonnull isa;   //实例对象的isa指向类，类的isa 指向元类</p>
+
+<p>#if !<strong>OBJC2</strong> // 如果不是 OC 2.0
+Class _Nullable super_class    //指向父类
+const char * _Nonnull name          //类名<br />
+long version                       <br />
+long info                                          <br />
+long instance_size                                  <br />
+struct objc_ivar_list * _Nullable ivars          //成员变量列表       <br />
+struct objc_method_list **methodLists;       //方法列表
+struct objc_cache * _Nonnull cache             //缓存
+struct objc_protocol_list * _Nullable protocols      //协议列表<br />
+#endif</p>
+
+<p>} OBJC2_UNAVAILABLE;</p>
+
+<p>修改methodlists 添加成员方法，是category实现的原理</p>
+
+<p>6、黑魔法 Method Swizzling，什么情况下调用</p>
+
+<p>简单的说就是方法交换，达到给系统的方法挂钩。</p>
+
+<p>Method Swizzling指的是改变一个已存在的选择器对应的实现的过程，oc中方法的调用能够在运行时通过改变 - 通过改变类的调度表中选择器到最终函数间的映射关系</p>
+
+<p>在OC中调用一个方法，其实是向一个对象发送消息，查找消息的唯一依据，</p>
+<ul>
+  <li>再没有一个类的实现源码的情况下，想改变其中一个方法的实现，可以灵活的使用 Method Swizzling</li>
+</ul>
+
+<p>关于Runtime的面试题</p>
+
+<p>1、Runtime 的方法调用是怎么实现的？</p>
+
+<p>如果用实例对象调用实例方法，会到实例的isa指针指向的对象（类对象）操作，如果调用的是类方法，就会到类对象的isa指针指向的对象 （元类对象）中操作。</p>
+
+<p>首先，在相应的操作的对象的缓存方法列表中找调用的方法，如果找到，转向相应的实现并执行</p>
+
+<p>如果没有找到，在相应操作的对象中的方法列表中找调用的方法，如果找到，转向相应的实现并执行</p>
+
+<p>如果没有找到，去父类指针所指向的对象中执行1、 2</p>
+
+<p>以此类推，如果一直找到根类还没有找到，转向拦截调用</p>
+
+<p>如果没有重写拦截调用的方法，程序报错。</p>
+
+<p>感悟：重写父类的方法，并没有覆盖掉父类的方法，只是不再去父类找了； 如果想调用已经重写过的父类的方法的实现，只需要使用super 这个编译器标志符，就会在运行时跳过当前类对象中寻找方法的过程。</p>
+
+<p>2 、Runtime 是什么？</p>
+
+<p>Runtime 又叫运行时，是一套底层的C语言API，是iOS内部的核心之一。OC代码的底层都是基于它来实现的。</p>
+
+<p>3、为什么需要Runtime</p>
+
+<p>OC 是一门动态语言，会将一些工作放在代码运行时才处理，不是编译的时候，也就是说，很多类和成员变量在编译的时候 是不知道的，在运行时候，编写的代码才会转换成完整的确定的代码执行。所以，编译器是不够的，我们需要一个运行时系统（Runtime system），来处理编译后的代码。（Runtime是基于C和汇编写的，由此可见苹果为了动态系统的搞笑而做出的努力）</p>
+
+<p>4、Runtime 有什么作用？（也可以从实际应用出发回答）</p>
+
+<p>Oc在三种层面上与Runtime系统进行交互</p>
+
+<ul>
+  <li>通过Objective-C源代码，只需要编写oc代码，Runtime系统自动在幕后搞定一切，调用方法，编译器会将oc代码转换成运行时代码，在运行时确定数据结构和函数</li>
+  <li>通过Foundation框架的NSObject类定义的方法</li>
+  <li>通过对Runtime库函数的直接调用</li>
+</ul>
+
+<p>5、Runtime 有哪些相关的术语？</p>
+
+<p>SEL  是selector 在objc中的表示，selector 是方法选择器，作用和名字一样，日常生活中，我们通过人名辨别谁是谁，注意在相同类中不会有命名相同的同哥方法，selector 对方法名进行包装，以便找到对应的方法实现。</p>
+
+<p>id 参数类型，指向某个类的实例的指针。 typedef struct objc_object *id;
+struct objc_object { Class isa; };</p>
+
+<p>Class  typedef struct objc_class *Class;</p>
+
+<p>Class 其实是指向objc_class 结构体的指针，objc_class的数据结构如下</p>
+
+<p>struct objc_class {</p>
+
+<p>Class isa  OBJC_ISA_AVAILABILITY;</p>
+
+<p>#if !<strong>OBJC2</strong></p>
+
+<p>Class super_class</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>const char *name</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>long version</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>long info</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>long instance_size</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>struct objc_ivar_list *ivars</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>struct objc_method_list **methodLists</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>struct objc_cache *cache</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>struct objc_protocol_list *protocols</p>
+
+<p>OBJC2_UNAVAILABLE; </p>
+
+<p>#endif
+ } OBJC2_UNAVAILABLE; </p>
+
+<p>从objc_class 可以看到，一个运行时类中 关联了他的父类指针，类名、成员变量、方法、缓存以及附属的协议。</p>
+
+<p>IMP  IMP在objc.h 中的定义是：</p>
+
+<p>typedef id (*IMP)(id, SEL, …);</p>
+
+<p>他就是一个函数指针，由编译器生成的，当你发起一个objc消息之后，最终他会执行的那段代码，就是由这个函数指针制定的，而IMP 这个函数指针就是指向了这个方法的实现。</p>
+
+<p>如果得到了执行某个实例、某个方法的入口，我们可以绕开消息传递阶段，直接执行方法。</p>
+
+<p>IMP指向的方法与objc_msgSend 函数类型相同，参数都包括 id 和 SEL类型， 每个方法名都对应一个SEL 类型的方法选择器，而每个实例对象中的SEL对应的方法实现肯定是唯一的，通过一组id 和SEL 参数就能确定唯一的方法实现地址。</p>
+
+<p>Cache 定义如下</p>
+
+<p>typedef struct objc_cache *Cache</p>
+
+<p>struct objc_cache {</p>
+
+<p>unsigned int mask /* total = mask + 1 */</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>unsigned int occupied</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>Method buckets[1]</p>
+
+<p>OBJC2_UNAVAILABLE;</p>
+
+<p>};</p>
+
+<p>Cache 为方法调用的性能进行优化，每当实例对象接收到一个消息时，他不会直接在isa 指针指向的类的方法列表中遍历找到能够响应的方法，因为每次都要查找，效率太低了，而是优先在Cache中查找</p>
+
+<p>Runtime 系统会把被调用的方法存到Cache中，如果一个方法被调用，那么他有可能还会被调用，下次查找的时候就会效率更高，就像计算机原理中CPU 绕过主寸先访问Cache 一样</p>
+
+<p>Property typedef struct objc_property *Property;</p>
+
+<p>typedef struct objc_property *objc_property_t;//  这个更常用，可以通过</p>
+
+<p>class_copyPropertyList  和 protocol_copyPropertyList  方法获取类 和协议中的属性。</p>
+
+<p>objc_property_t <em>class_copyPropertyList(Class cls, unsigned int</em>outCount)</p>
+
+<p>objc_property_t *protocol_copyPropertyList(Protocol *proto,unsigned int *outCount)</p>
+
+<p>注意：返回的是属性列表，列表中每个元素都是一个 objc_property_t  指针， name——–T@”NSString”,&amp;,N,V_name</p>
+
+<p>property_getName  用来查找属性名称，返回C字符串</p>
+
+<p>property_getAttributes  函数挖掘属性 的真实名称 和 @encode 类型，返回C字符串</p>
+
+<p>6、Runtime 和消息？</p>
+
+<p>messages  aren’t bound to method implementations until Runtime  消息知道运行时才会与方法实现进行绑定。 
+这里要清楚一点，objc_msgSend 方法看起来好像是返回了数据，其实objc_msgSend 从不返回数据，而是你的方法在运行时被调用后才会返回数据，下面详细叙述消息发送的步骤</p>
+
+<ul>
+  <li>
+    <p>首先检测这个selector 是不是要忽略，比如Mac OS X 开发，有了垃圾回收就不会理会retain、release 这些函数</p>
+  </li>
+  <li>
+    <p>检测这个selector的tatget是不是nil，Objc 允许我们对一个nil对象执行任何方法不会Crash，因为运行时会被忽略掉</p>
+  </li>
+  <li>
+    <p>如果上面两步都通过了，那么就开始查找这个类的实现IMP，先从cache里查找，如果找到了就运行对应的函数去执行相应的代码</p>
+  </li>
+  <li>
+    <p>如果cache找不到，就找类的方法列表中查找是否有对应的方法</p>
+  </li>
+  <li>
+    <p>如果类的方法列表中找不到就到父类的方法列表中查找，一直找到NSObject 类为止</p>
+  </li>
+  <li>
+    <p>如果还找不到，就要开始进入动态方法解析了</p>
+  </li>
+</ul>
+
+<p>在消息的传递中，编译器会根据情况在objc_msgSend \ objc_msgSend_stret \ objc_msgSendSuper \ objc_msgSendSuper_stret 这四个方法中选择一个调用，如果消息是传递给父类，那么会调用名字带有super的函数，如果消息返回值是数据结构而不是简单值时，会调用名字带有stret的函数</p>
+
+<p>7、消息转发</p>
+
+<ul>
+  <li>重定向</li>
+</ul>
+
+<p>消息转发机制执行前，Runtime 系统允许我们替换消息的接收者为其他对象。通过- (id)forwardingTargetForSelector:(SEL)aSelector  方法。</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="n">forwardingTargetForSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">aSelector</span>
+<span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="n">aSelector</span> <span class="o">==</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">mysteriousMethod</span><span class="p">:)){</span>
+<span class="k">return</span> <span class="n">alternateObject</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="p">[</span><span class="k">super</span> <span class="n">forwardingTargetForSelector</span><span class="ss">:aSelector</span><span class="p">];</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>如果此方法返回nil 或者self。则会计入消息转发机制 (forwardInvocation:)  ，否则将向返回的对象重新发送消息</p>
+
+<ul>
+  <li>转发</li>
+</ul>
+
+<p>当动态方法解析不做处理返回NO 时，则会触发消息转发机制。这时，forwardInvocation: 方法会被执行，我们可以重写这个方法来自定义我们的转发逻辑</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">forwardInvocation</span><span class="p">:(</span><span class="no">NSInvocation</span> <span class="o">*</span><span class="p">)</span><span class="n">anInvocation</span>
+<span class="p">{</span>
+<span class="k">if</span> <span class="p">([</span><span class="n">someOtherObject</span> <span class="ss">respondsToSelector: </span><span class="p">[</span><span class="n">anInvocation</span> <span class="n">selector</span><span class="p">]])</span>
+<span class="p">[</span><span class="n">anInvocation</span> <span class="n">invokeWithTarget</span><span class="ss">:someOtherObject</span><span class="p">];</span>
+<span class="k">else</span>
+<span class="p">[</span><span class="k">super</span> <span class="n">forwardInvocation</span><span class="ss">:anInvocation</span><span class="p">];</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>唯一参数  是个NSInvocation 类型的对象，该对象封装了原始的消息和消息的参数，我们可以实现forwardInvocation: 方法来对不能处理的消息做一些处理。也可以将消息转发给其他对象处理，而不排除错误。</p>
+
+<p>转发和继承相似，可用于为objc 编程添加一些多继承的效果。一个对象把消息转发出去，就好像它把另一个对象中的方法接过来或者“继承”过来一样。</p>
+
+<p>8、转发与继承</p>
+
+<p>虽然转发可以实现继承的功能，但是NSObject 还是必须表面上很严谨，像respondsToSelector ：和 isKindOfClass: 这类方法只会考虑继承体系，不会考虑转发链。</p>
+
+<p>Warrior 对象被问到是否能响应 negotiate消息：</p>
+
+<p>if ( [aWarrior respondsToSelector:@selector(negotiate)] )</p>
+
+<p>回答当然是NO，尽管他能接受 negotiate消息而不报错，因为它靠转发消息给Diploat 类响应消息。</p>
+
+<p>如果你就是想要别人以为Warrior 继承到了 Diplomat的 negotiate 方法，你得重新实现 respondsToSelector：和 isKindOfClass：来加入你的转发算法
+ </p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="o">-</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span><span class="n">respondsToSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">aSelector</span>
+<span class="k">if</span> <span class="p">(</span> <span class="p">[</span><span class="k">super</span> <span class="n">respondsToSelector</span><span class="ss">:aSelector</span><span class="p">]</span> <span class="p">)</span>
+<span class="k">return</span> <span class="no">YES</span><span class="p">;</span>
+<span class="k">else</span> <span class="p">{</span>
+<span class="sr">/* Here, test whether the aSelector message can     *
+* be forwarded to another object and whether that  *
+* object can respond to it. Return YES if it can.  */</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="no">NO</span><span class="p">;</span> <span class="p">}</span> 
+
+ </code></pre></figure>
+
+<p>除了 respondsToSelector:  和  isKindOfClass:  之外，instancesRespondToSelector:  中也应该写一份转发算法，如果使用了协议 conformsToProtocol:  同样也要加入到这一行列中。如果一个对象想要转发他接受的任何远程消息，他得给出一个方法标签来返回准确的方法描述，methodSignatureForSelector：这个方法会最终响应被转发的消息，从而生成一个确定的NSInvocation 对象 描述消息和消息参数，这个方法最中响应被转发的消息。他要像下面这样实现</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="o">-</span> <span class="p">(</span><span class="no">NSMethodSignature</span><span class="o">*</span><span class="p">)</span><span class="n">methodSignatureForSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">selector</span>
+<span class="p">{</span>
+<span class="no">NSMethodSignature</span><span class="o">*</span> <span class="n">signature</span> <span class="o">=</span> <span class="p">[</span><span class="k">super</span>
+<span class="n">methodSignatureForSelector</span><span class="ss">:selector</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">signature</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="p">[</span><span class="n">surrogate</span>
+<span class="n">methodSignatureForSelector</span><span class="ss">:selector</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="n">signature</span><span class="p">;</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>9、健壮的实例变量</p>
+
+<p>在Runtime的现行版本中，最大的特点就是健壮的实例变量了。</p>
+
+<p>我们让自己的类继承自 NSObject 不仅仅是因为基类 有很多复杂的内存分类问题，更是因为这使得我们可以享受到Runtime系统带来的便利。虽然平时我们平时很少会考虑一句简单的调用方法，发送消息底层所做的复杂的操作，但深入理解Runtime 系统的细节使得我们可以利用消息机制写出功能更强大的代码。</p>
+
+<p>10、runtime实现的机制是什么，怎么用，一般用于干什么，你还能记得你所使用的相关的头文件或者某些方法名称吗？</p>
+
+<ul>
+  <li>
+    <p>需要导入     &lt;objc/message.h&gt;&lt;objc/runtime.h&gt;</p>
+  </li>
+  <li>
+    <p>Runtime 运行时机制，是一套C语言库</p>
+  </li>
+  <li>
+    <p>实际上我们编写的所有OC代码，最中都是转成了runtime 库的东西，比如类转成了 runtime 库里面的结构体等数据类型，方法转成了runtime 库里面的c语言函数，平时调用方法都是转成了 objc_msgSend函数，（所以说OC有个消息发送机制）</p>
+  </li>
+  <li>
+    <p>因此，runtime是OC的底层实现，是OC的幕后执行者</p>
+  </li>
+  <li>
+    <p>有了runtime库，能做什么事情呢？runtime库里面包含了类、成员变量、方法相关的API，比如获取类里面的所有成员变量，为类动态添加成员变量，动态改变类的方法实现，为类动态添加新方法等。</p>
+  </li>
+</ul>
+
+<p>11、OC如何对已有的方法，添加自己的功能代码以实现类似的记录日志这样的功能？</p>
+
+<p>Category - 方法交换</p>
+
+<p>这里主要考察方法交换，现在分类中添加一个方法，注意不能重写系统方法，会覆盖</p>
+
+<p>12、如何让Category 支持属性？</p>
+
+<p>关联属性</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="vi">@interface</span> <span class="no">NSObject</span> <span class="p">(</span><span class="nb">test</span><span class="p">)</span>
+<span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span> <span class="no">NSString</span> <span class="o">*</span><span class="nb">name</span><span class="p">;</span>
+<span class="vi">@end</span> 
+<span class="p">.</span><span class="nf">m</span> 
+<span class="vi">@implementation</span> <span class="no">NSObject</span> <span class="p">(</span><span class="nb">test</span><span class="p">)</span>
+<span class="sr">//</span> <span class="n">key</span> 
+<span class="n">static</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="s2">"name"</span><span class="p">;</span>
+<span class="o">-</span><span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nb">name</span>
+<span class="p">{</span><span class="err"> </span><span class="o">/</span><span class="sr">/ key  根据关联的key，获取关联的值
+return objc_getAssociatedObject(self, key);
+}
+-(void)setName:(NSString *)name
+{
+/</span><span class="o">/</span> <span class="err">第一个参数</span> <span class="err">：给哪个对象添加关联</span>
+<span class="sr">//</span> <span class="err">第二个参数</span> <span class="err">：关联的</span><span class="n">key</span><span class="err">，通过这个</span><span class="n">key</span> <span class="err">获取</span>
+<span class="sr">//</span> <span class="err">第三个参数</span> <span class="err">：关联的</span><span class="n">value</span>
+<span class="sr">//</span> <span class="err">第四个参数</span> <span class="err">：关联的策略</span>
+<span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span>
+<span class="no">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span><span class="p">);</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>13、Toll-Free Bridging 是什么，什么情况下会使用？</p>
+
+<p>Toll-Free Bridging 用于在 Foundation  对象与 Core Foundation 对象之间交换数据，俗称桥接。在ARC环境下，Foundation对象转成Core Foundation对象，使用__bridge 桥接以后ARC 会自动管理2个对象。使用__bridge __retained桥接需要手动释放 Core Foundation对象。在ARC 环境下，Core Foundation对象转成了Foundation对象。使用__bridge 桥接，如果Core Fouundation 对象被释放，Foundation对象同时也不能使用了，需要手动管理Core Foundation对象。使用__bridge_transfer桥接，系统会自动管理2个对象。</p>
+
+<p>14、performSelector ：withObject ：faterDelay 内容大概是怎么实现的，有什么注意事项？</p>
+
+<p>创建一个定时器，时间结束后，系统会使用runtime通过方法名称（Selector 本质就是方法名称）去方法列表中找到对应的方法并调用方法</p>
+
+<p>注意事项：调用 performSelector ：withObject ：faterDelay  方法时，先判断希望调用的方法是否存在respondsToSelector 
+这个方法是异步方法，必须在主线程调用，在子线程调用永远不会调用到想调用的方法</p>
+
+<p>15 、能否向编译后得到的类中增加实例变量？能否向运行时创建的类中添加实例变量？为什么？</p>
+
+<p>不能向编译后得到的类中添加实例变量</p>
+
+<p>能像运行时创建的类中添加实例变量</p>
+
+<p>因为编译后的类已经注册在runtime中，类结构体 objc_ivar_list  实例变量的链表 和 instance_size  实例变量的内存大小已经确定，同时runtime 会调用 class_setIvarLayout 或 class_setWeakIvarLayout 来处理 strong weak 饮用，所以不能向存在的类中添加实例变量。</p>
+
+<p>运行时创建的类可以添加实例变量，调用class_addIvar 函数，但是得到调用 objc_allocateClassPair  之后，objc_registerClassPair 之前，原因同上。</p>
+
+<p>16、为什么其他语言里叫函数调用，OC 里则是给对象发消息（或者谈下runtime的理解）</p>
+
+<p>17、runtime 如何实现weak属性？</p>
+
+<p>通过关联属性来实现</p>
+
+<p>声明一个weak 属性，这里假设delegate 其实weak 关键字可以不使用，因为我们重写了getter/setter 方法，</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">weak</span><span class="p">)</span> <span class="nb">id</span> <span class="n">delegate</span><span class="p">;</span> 
+
+<span class="o">-</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="n">delegate</span> <span class="p">{</span>
+
+<span class="k">return</span> <span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="err">@</span><span class="s2">"__delegate__key"</span><span class="p">);</span> 
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>指定使用 OBJC_ASSOCIATION_ASSIGN 官方注释 Specifies a weak reference to the associated object</p>
+
+<p>也就是说 对于对象类型，就是weak 了</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
+<span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">setDelegate</span><span class="p">:(</span><span class="nb">id</span><span class="p">)</span><span class="n">delegate</span> <span class="p">{</span>
+<span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="err">@</span><span class="s2">"__delegate__key"</span><span class="p">,</span> <span class="n">delegate</span><span class="p">,</span> <span class="no">OBJC_ASSOCIATION_ASSIGN</span><span class="p">);</span>
+<span class="p">}</span>
+
+ </code></pre></figure>
+
+<p>通过 objc_storeWeak 函数来实现，不过这种方式几乎没有遇到过有人这么实用，所以不细说。 </p>
+
+<p>18、runtime 如何通过selector 找到对应的IMP地址？</p>
+
+<p>每个selector 都与对应的IMP是一一对应的关系，通过selector 就可以直接找到对应的IMP；</p>
+
+<p>19、objc_msgForward 函数是做什么的，直接调用他将会发生什么？</p>
+
+<p>objc_msgForward 是IMP 类型，用于消息转发的，当向一个对象发送一条消息，但是它并没有实现的时候objc_msgForward 会尝试做消息转发， IMP msgForward = _objc_msgForward;</p>
+
+<p>如果手动调用  objc_msgForward 将跳过查找 IMP 的过程，而是直接触发 “消息转发”，进入如下流程</p>
+
+<p>第一步 ：+ (BOOL)resolveInstanceMethod:(SEL)sel  实现方法，指定是否动态添加方法，如果返回 NO 则进行下一步，若返回 YES ，则通过class_addMethod 函数动态的添加方法，消息得到处理，此流程完毕</p>
+
+<p>第二步：在第一步返回的是 NO 时候，就会进入(id)forwardingTargetForSelector:(SEL)aSelector  方法，这是运行时给我们的第二次机会，用于制定哪个对象响应这个slector ，不能指定为self，若返回nil，表示没有响应者，则进入第三步，若返回某个对象，则会调用该对象的方法。</p>
+
+<p>第三步，若第二步返回的是nil，则我们首先是通过 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector  指定方法签名，若返回nil 则表示不处理，若返回方法签名，则会进入下一步</p>
+
+<p>第四步：当第三步返回方法方法签名后，就会调用 (void)forwardInvocation:(NSInvocation *)anInvocation 方法，我们可以通过 anInvocation  对象做很多处理，比如修改实现方法，修改响应对象等。</p>
+
+<p>第五步，如果没有实现 - (void)forwardInvocation:(NSInvocation *)anInvocation  方法，那么会进入 -(void)doesNotRecognizeSelector:(SEL)aSelector  方法，如果我们没有实现这个方法，那么就会crash 然后提示找不到相应的方法，到此，动态解析的流程就结束了。</p>
+
+<p>20、runtime 如何实现weak变量的自动置nil？</p>
+
+<p>Runtime 对注册的类 会进行布局，对于weak 对象 会放入一个hash 表中，用weak 指向的对象内存地址作为key，档次对象的引用计数为0的时候就会dealloc。加入weak指向的对象 内存地址是a，那么就会以a为键，在这个weak 表中搜索，找到所有以a为键的weak 对象，从而设置为 nil。 weak 修饰的指针默认值是nil ，在objective - c中向nil 发送消息是安全的。</p>
+
+<p>21、动态绑定？</p>
+
+<p>在运行时确定要调用的方法，动态绑定将调用方法的确定也推迟到了运行时。在编译时，方法的调用并不和代码绑定在一起，只有在消息发送出来以后，才确定被调用的代码。通过 动态类型 和动态绑定技术，代码每次执行都可以得到不同的结果。运行时因子负责确定消息的接收者 和被调用的方法，运行时的消息分发机制为 动态绑定提供支持。当向一个动态类型确定了对象发送消息时候，运行环境系统会通过接收着的isa 指针定位对象的类，并以此为起点确定被调用的方法，方法和消息是动态绑定的。而且，不必在objective - c代码中做任何工作，就可以自动获取动态绑定的好处，在每次发送消息的时候，特别是当消息的接收者 是动态类型已经确定的对象时，动态绑定就会例行而透明的发生。</p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS-Runloop/" title="link to iOS - Runloop">iOS - Runloop</a></h2>
+       <p class="excerpt">RunLoopRunLoop和线程紧密相连。runloop是为了线程而生，没有线程，就没有存在的必要。每个线程，都有与之对应的runloop对象。主线程的runloop默认是开启的。对于其他线程来说，runloop默认是不启动的。如果需要更多的线程交互则可以手动配置和启动。如果线程知识去执行一个长时间的已确定的任务则不需要。int main(int argc,char *argv[]){@autoreleasepool{return UIApplicationMain(argc, argv...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-20 18:04:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS-Runloop/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/" title="link to iOS - 面试题">iOS - 面试题</a></h2>
+       <p class="excerpt">面试题 一基础1、为什么说Objective-C是 动态的语言 ?动态加载：比如2x、3x图片，根据机型动态加载图片动态类型：运行时再决定对象的类型，简单说就是id类型。任何对象都可以被id指针所指，只有在运行时，才能决定是什么类型。像内置的明确的基本类型都属于静态类型 （int NSString等），静态类型在编译的时候就能被识别出来，所以，若程序发生了类型不对应，编译器就会发出警告。而动态类型就编译器编译的时候是不能被识别的，要等到运行时(runtime)，即程序运行的时候才会根据语境...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-20 11:34:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/04/iOS-Runtime/";
+        this.page.identifier = "/2018/04/iOS-Runtime/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

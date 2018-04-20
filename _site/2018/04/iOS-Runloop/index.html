@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS - Runloop</title>
+  <meta name="description" content="RunLoop">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS - Runloop">
+  <meta name="twitter:description" content="RunLoop">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS - Runloop">
+  <meta property="og:description" content="RunLoop">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/04/iOS-Runloop/">
+  <link rel="alternate" type="application/rss+xml" title="Susise" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Susise 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Susise logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Susise" class="blog-button">Susise</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">To be the one that you want to be</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Love.Action.Hope.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="https://github.com/Susise" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/p/1005055503228222" title="@p/1005055503228222 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Susise" title="@Susise 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:s_qiaoqiao@163.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-04-20 18:04:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-04-20</time> &#8226; <span class="post-meta__tags tags"></span>
+    </div>
+    <h1 class="post-title">iOS - Runloop</h1>
+  </header>
+
+  <section class="post">
+    <p>RunLoop</p>
+
+<p>RunLoop和线程紧密相连。runloop是为了线程而生，没有线程，就没有存在的必要。每个线程，都有与之对应的runloop对象。主线程的runloop默认是开启的。对于其他线程来说，runloop默认是不启动的。如果需要更多的线程交互则可以手动配置和启动。如果线程知识去执行一个长时间的已确定的任务则不需要。</p>
+
+<p>int main(int argc,char *argv[]){
+@autoreleasepool{
+return UIApplicationMain(argc, argv,nil,NSStringFromClass([appDelegateclass]));
+}
+}</p>
+
+<p>UIApplicationMain()函数，这个方法会为main thread 设置一个NSRunLoop 对象。应用无人操作的时候休息，让他干活的时候能立马响应。</p>
+
+<p>iOS中有两个API来访问和使用RunLoop</p>
+
+<p>Foundation框架中的。NSRunLoop</p>
+
+<p>CoreFoundtion 中的 CFRunLoopRef</p>
+
+<p>一、Runloop 与线程</p>
+
+<p>1、每条线程都有唯一的一个与之对应的Runloop 对象
+2、主线程的Runloop 已经自动创建好了，子线程的RunLoop 需要主动创建
+3、RunLoop 在第一次获取时创建，在线程结束时销毁
+4、获取RunLoop对象</p>
+
+<p>Foundation  [NSRunLoop currentRunLoop]; 获取当前线程的runloop
+[NSRunLoop mainRunLoop]；获得主线程的Runloop
+CoreFoundation  CFRunLoopGetCurrent(); // 获得当前线程的RunLoop对象 
+CFRunLoopGetMain(); // 获得主线程的RunLoop对象  </p>
+
+<p>如果给子线程添加runloop，不能直接alloc init，只要调用currentrunloop ，系统就会自动创建一个 Runloop 添加到当前线程中。[NSRunLoop currentRunLoop]; // 这个方法是懒加载</p>
+
+<p>二、RunLoop 相关类</p>
+
+<p>CoreFoundation 中关于RunLoop的5个类</p>
+
+<p>CFRunLoopRef
+CFRunLoopModeRef
+CFRunLoopSourceRef
+CFRunLoopTimerRef
+CFRunLoopObserverRef</p>
+
+<p>1、CFRunLoopModeRef  不太明白几个mode 的区别</p>
+
+<p>CFRunLoopModeRef 表示RunLoop 的运行模式，一个RunLoop 包含若干个Mode，每个Mode 又包含若干个Source/Timer/Observer。
+每次RunLoop启动时，只能指定其中一个Mode，这个Mode被称作CurrentMode
+如果需要切换Mode，只能退出Loop，在重新指定Mode 进入，这样做主要为了分隔开不同组的Source/Timer/Observer 让其互不影响</p>
+
+<p>系统默认注册了 5个Mode。</p>
+
+<p>KCFRunLoopDefaultMode App的默认Mode，通常主线程就是在这个Mode下运行的</p>
+
+<p>UITrackingRunLoopMode 界面跟踪 Mode，用于ScrollView追踪触摸滑动，保证界面滑动时不受其他Mode影响</p>
+
+<p>UIInitializationRunLoopMode 在刚启动App 时 进入的第一个 Mode，启动完成后就不再使用</p>
+
+<p>GSEventReceiveRunLoopMode 接受系统事件的内部Mode，通常用不到，</p>
+
+<p>KCFRunLoopCommonModes 这是一个占位用的 Mode，不是一种真正的Mode</p>
+
+<p>详细见代码：四种倒计时方式  RunLoop</p>
+
+<p>2、CFRunLoopSourceRef</p>
+
+<p>CFRunLoopSourceRef 是事件源（输入源），以前的分法 Port-BasedSources、Custom InputSources、Cocoa PerformSelector Sources。现在分法：Source0：非基于Port的，用于用户主动触发的事件、Source1：基于Port的，通过内核和其它线程相互发送消息</p>
+
+<p>3、CFRunLoopTimerRef</p>
+
+<p>CFRunLoopTimerRef 是基于时间的触发器，基本上说的就是NSTimer，它会受runloop的mode影响。GCD 定时器不受Runloop 的mode的影响。</p>
+
+<p>4、CFRunLoopObserverRef</p>
+
+<p>CFRunLoopObserverRef 是观察者，能狗监听RunLoop 的状态改变。可以监听的时间点有以下几个</p>
+
+<figure>
+<a><img src="http://localhost:4000/images/avatar.jpg" /></a>
+</figure>
+
+<p>/images/avatar.jpg</p>
+
+<p><code class="highlighter-rouge">![](images/avatar.jpg)</code></p>
+
+<p><img src="/images/avatar.jpg" alt="图片" /></p>
+
+<p>可以监测Timer</p>
+
+<p>三、CoreFoundation 的内存个管理</p>
+
+<p>1 、凡是带有Create、Copy、Retain等字眼的函数，创建出来的对象，都需要在最后做一次release
+    比如CFRunLoopObserverCreate
+    
+    ￼
+    
+    
+    ￼
+    
+    
+    三、runloop的使用 详细见代码 RunLoop
+    
+    1、NSTimer 
+    2、ImageView显示
+    3、PerformSelector
+    4、常驻线程
+    5、自动释放池
+    
+    四 RunLoop面试题
+    
+    1、什么是RunLoop？
+    
+    1)从字面意思看：运行循环、跑圈
+    
+    2)其实它内部就是do-while循环，在这个循环内部不断地处理各种任务（比如Source、Timer、Observer）
+    
+    3)一个线程对应一个RunLoop，主线程的RunLoop默认已经启动，子线程的RunLoop得手动启动（调用run方法）
+    
+    4)RunLoop只能选择一个Mode启动，如果当前Mode中没有任何Source(Sources0、Sources1)、Timer，那么就直接退出RunLoop
+    
+    2、自动释放池什么时候释放
+    
+    通过Observer监听RunLoop的状态
+    
+    3、在开发中如何使用RunLoop，什么应用场景
+    
+    开启一个常驻线程（让一个子线程不进入消亡状态，等待其他线程发来消息，处理其他事件）。在子线程中开启一个定时器，在子线程中进行一些长期监控
+    
+    可以控制定时器在特定模式下执行。可以让某些事件（行为、任务）在特定模式下执行。可以添加Observer监听RunLoop的状态，比如监听点击事件的处理（在所有点击事件之前做一些事情）
+    
+    
+    Core Foundation框架 和Foundation框架 
+    
+    Core Foundation框架 是一组C语言接口，为iOS应用程序提供基本数据管理和服务功能。下面是该框架支持进行管理的数据以及可提供的服务
+    
+    * 群体数据类型 (数组、集合等)
+    
+    * 程序包
+    
+    * 字符串管理
+    
+    * 日期和时间管理
+    
+    * 原始数据块管理
+    
+    * 偏好管理
+    
+    * URL及数据流操作
+    
+    * 线程和RunLoop
+    
+    * 端口和soket通讯
+    
+    Foundation 框架 提供Objective-C接口，如果要把Foundation 对象和 Core Foundation 类型参杂使用，则可利用两个框架之间的 “toll-free bridging”，所谓的Toll-free bridging 是说您可以在某个框架的方法或函数同时使用Core Foundation
+    和Foundation 框架中的某些类型，很多数据支持这一特性。其中包括群体和字符串数据类型。每个框架的类和类型描述都会对某个对象是否为toll-free bridged 应和什么对象桥接进行说明。
+    
+   </p>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS-Runtime/" title="link to iOS - Runtime 的理解">iOS - Runtime 的理解</a></h2>
+       <p class="excerpt">Runtime1、什么是Runtime？Runtime 又叫运行时，是一套底层的C语言API，是iOS内部的核心之一，OC代码的底层都是基于它来实现的，最终都是转化成了Runtime的C语言代码。其中最主要的就是消息机制OC中一切都被设计成对象，我们都知道一个类被初始化成一个实例，这个实例是一个对象。实际上一个类本质上也是一个对象。为什么说oc是面向对象的动态语言？动态加载 例如2x 3x 图片动态类型，比如说id类型，在运行时才能确定到底是什么类型动态绑定，比如说，在编译时候并不能决定真...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-20 17:41:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS-Runtime/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/04/iOS-Runloop/";
+        this.page.identifier = "/2018/04/iOS-Runloop/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
