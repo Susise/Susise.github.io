@@ -55,26 +55,21 @@ class_getInstanceMethod([self class], @selector(testObjectMethod))  获取实例
 
 交换两个方法 — 当某个系统的方法不能满足需求的时候，在系统方法的需求上添加。例如，统计进入vc时间
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
 Method me1 = class_getInstanceMethod([self class], @selector(meth1));
 Method me2 = class_getInstanceMethod([self class], @selector(meth2));
 method_exchangeImplementations(me1, me2);
-
- {% endhighlight %}
- 
+{% endhighlight %}
 
 拦截调用、添加方法：再找不到调用方法，程序崩溃之前，有机会重写NSObject的四个方法来处理（其实拦截调用的恶原理就是动态添加方法）
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
 class_addMethod([self class], NSSelectorFromString(@"aaa"), (IMP)aaa, "V@:")
+{% endhighlight %}
 
- {% endhighlight %}
+\+ (BOOL )resolveInstanceMethod:(SEL)sel  //当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES
 
-+ (BOOL )resolveInstanceMethod:(SEL)sel  //当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES
-
-+ (BOOL)resolveClassMethod:(SEL)sel
+\+ (BOOL)resolveClassMethod:(SEL)sel
 
 //后两个方法需要转发到其他的类处理
 - (id)forwardingTargetForSelector:(SEL)aSelector //将你调用的不存在的方法重定向到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target
@@ -83,25 +78,21 @@ class_addMethod([self class], NSSelectorFromString(@"aaa"), (IMP)aaa, "V@:")
 
 关联对象、动态添加属性 -  应用：给Category添加属性
 
-  {% highlight ruby %}
-
+{% highlight ruby %}
 static const char *key = "name";
-
 - (void)setName:(NSString *)name{
 objc_setAssociatedObject(self, key, name, OBJC_ASSOCIATION_COPY);
 }
 - (NSString *)name{
 return objc_getAssociatedObject(self, key);
 }
+{% endhighlight %}
 
- {% endhighlight %}
- 
 实现NSCoding的自动归档和解档
-
 
 如果有100个属性，就要写一百遍
 
-  {% highlight ruby %}
+{% highlight ruby %}
 
 #import "Movie.h" 
 
@@ -137,7 +128,7 @@ return self;
 }
 @end
 
- {% endhighlight %}
+{% endhighlight %}
 
 字典转模型
 
@@ -145,7 +136,7 @@ return self;
 
 （1） kvc
 
-  {% highlight ruby %}
+{% highlight ruby %}
   
 + (instancetype)statusWithDict:(NSDictionary *)dict { 
 Status *status = [[self alloc] init]; 
@@ -153,7 +144,7 @@ Status *status = [[self alloc] init];
 return status;
 }
 
- {% endhighlight %}
+{% endhighlight %}
  
 Kvc 转模型必须保证，模型中的属性和字典中的key 一一对应。如果不一致，就报 setvalue forundefinedKey 找不到key
 
@@ -162,9 +153,6 @@ Kvc 转模型必须保证，模型中的属性和字典中的key 一一对应。
 （2）Runtime
 
 利用运行时，遍历模型中的所有属性，根据属性的属性名，去查找字典中的key，取出对应的值，给模型的属性赋值。
-
-
-
 
 
 4、Runtime的相关应用/具体实现/你在开发中用到的runtime
@@ -396,7 +384,7 @@ messages  aren’t bound to method implementations until Runtime  消息知道�
 
 7、消息转发
 
-- 重定向
+\- 重定向
 
 消息转发机制执行前，Runtime 系统允许我们替换消息的接收者为其他对象。通过- (id)forwardingTargetForSelector:(SEL)aSelector  方法。 
 
@@ -414,7 +402,7 @@ return [super forwardingTargetForSelector:aSelector];
 
 如果此方法返回nil 或者self。则会计入消息转发机制 (forwardInvocation:)  ，否则将向返回的对象重新发送消息
 
-- 转发
+\- 转发
 
 当动态方法解析不做处理返回NO 时，则会触发消息转发机制。这时，forwardInvocation: 方法会被执行，我们可以重写这个方法来自定义我们的转发逻辑
 
@@ -446,8 +434,8 @@ if ( [aWarrior respondsToSelector:@selector(negotiate)] )
 
 如果你就是想要别人以为Warrior 继承到了 Diplomat的 negotiate 方法，你得重新实现 respondsToSelector：和 isKindOfClass：来加入你的转发算法
  
-  {% highlight ruby %}
-  
+{% highlight ruby %}
+
 - (BOOL)respondsToSelector:(SEL)aSelector
 if ( [super respondsToSelector:aSelector] )
 return YES;
@@ -458,12 +446,12 @@ else {
 }
 return NO; } 
 
- {% endhighlight %}
+{% endhighlight %}
 
 除了 respondsToSelector:  和  isKindOfClass:  之外，instancesRespondToSelector:  中也应该写一份转发算法，如果使用了协议 conformsToProtocol:  同样也要加入到这一行列中。如果一个对象想要转发他接受的任何远程消息，他得给出一个方法标签来返回准确的方法描述，methodSignatureForSelector：这个方法会最终响应被转发的消息，从而生成一个确定的NSInvocation 对象 描述消息和消息参数，这个方法最中响应被转发的消息。他要像下面这样实现
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
+
 - (NSMethodSignature*)methodSignatureForSelector:(SEL)selector
 {
 NSMethodSignature* signature = [super
@@ -475,7 +463,7 @@ methodSignatureForSelector:selector];
 return signature;
 }
 
- {% endhighlight %}
+{% endhighlight %}
 
 
 9、健壮的实例变量
@@ -506,8 +494,8 @@ Category - 方法交换
 
 关联属性
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
+
 @interface NSObject (test)
 @property (nonatomic, copy) NSString *name;
 @end 
@@ -529,7 +517,7 @@ objc_setAssociatedObject(self, key, name,
 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
- {% endhighlight %}
+{% endhighlight %}
  
 13、Toll-Free Bridging 是什么，什么情况下会使用？
 
@@ -561,8 +549,8 @@ Toll-Free Bridging 用于在 Foundation  对象与 Core Foundation 对象之间�
 
 声明一个weak 属性，这里假设delegate 其实weak 关键字可以不使用，因为我们重写了getter/setter 方法，
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
+
 @property (nonatomic, weak) id delegate; 
 
 - (id)delegate {
@@ -570,19 +558,19 @@ Toll-Free Bridging 用于在 Foundation  对象与 Core Foundation 对象之间�
 return objc_getAssociatedObject(self, @"__delegate__key"); 
 }
 
- {% endhighlight %}
+{% endhighlight %}
  
 指定使用 OBJC_ASSOCIATION_ASSIGN 官方注释 Specifies a weak reference to the associated object 
 
 也就是说 对于对象类型，就是weak 了
 
-  {% highlight ruby %}
-  
+{% highlight ruby %}
+
 - (void)setDelegate:(id)delegate {
 objc_setAssociatedObject(self, @"__delegate__key", delegate, OBJC_ASSOCIATION_ASSIGN);
 }
 
- {% endhighlight %}
+{% endhighlight %}
 
 通过 objc_storeWeak 函数来实现，不过这种方式几乎没有遇到过有人这么实用，所以不细说。 
 

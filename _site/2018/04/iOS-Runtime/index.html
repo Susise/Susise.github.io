@@ -121,7 +121,7 @@
     </div>
     
     
-    <div class="panel-cover--overlay cover-red"></div>
+    <div class="panel-cover--overlay cover-black"></div>
     
   </div>
 </header>
@@ -186,28 +186,17 @@
 
 <p>交换两个方法 — 当某个系统的方法不能满足需求的时候，在系统方法的需求上添加。例如，统计进入vc时间</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="no">Method</span> <span class="n">me1</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">meth1</span><span class="p">));</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Method</span> <span class="n">me1</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">meth1</span><span class="p">));</span>
 <span class="no">Method</span> <span class="n">me2</span> <span class="o">=</span> <span class="n">class_getInstanceMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="vi">@selector</span><span class="p">(</span><span class="n">meth2</span><span class="p">));</span>
-<span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">me1</span><span class="p">,</span> <span class="n">me2</span><span class="p">);</span>
-
- </code></pre></figure>
+<span class="n">method_exchangeImplementations</span><span class="p">(</span><span class="n">me1</span><span class="p">,</span> <span class="n">me2</span><span class="p">);</span></code></pre></figure>
 
 <p>拦截调用、添加方法：再找不到调用方法，程序崩溃之前，有机会重写NSObject的四个方法来处理（其实拦截调用的恶原理就是动态添加方法）</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="n">class_addMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="no">NSSelectorFromString</span><span class="p">(</span><span class="err">@</span><span class="s2">"aaa"</span><span class="p">),</span> <span class="p">(</span><span class="no">IMP</span><span class="p">)</span><span class="n">aaa</span><span class="p">,</span> <span class="s2">"V@:"</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">class_addMethod</span><span class="p">([</span><span class="nb">self</span> <span class="k">class</span><span class="p">],</span> <span class="no">NSSelectorFromString</span><span class="p">(</span><span class="err">@</span><span class="s2">"aaa"</span><span class="p">),</span> <span class="p">(</span><span class="no">IMP</span><span class="p">)</span><span class="n">aaa</span><span class="p">,</span> <span class="s2">"V@:"</span><span class="p">)</span></code></pre></figure>
 
- </code></pre></figure>
+<p>+ (BOOL )resolveInstanceMethod:(SEL)sel  //当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES</p>
 
-<ul>
-  <li>
-    <p>(BOOL )resolveInstanceMethod:(SEL)sel  //当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES</p>
-  </li>
-  <li>
-    <p>(BOOL)resolveClassMethod:(SEL)sel</p>
-  </li>
-</ul>
+<p>+ (BOOL)resolveClassMethod:(SEL)sel</p>
 
 <p>//后两个方法需要转发到其他的类处理</p>
 <ul>
@@ -222,15 +211,12 @@
 <p>关联对象、动态添加属性 -  应用：给Category添加属性</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">static</span> <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">key</span> <span class="o">=</span> <span class="s2">"name"</span><span class="p">;</span>
-
 <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">setName</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nb">name</span><span class="p">{</span>
 <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span> <span class="no">OBJC_ASSOCIATION_COPY</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="o">-</span> <span class="p">(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nb">name</span><span class="p">{</span>
 <span class="k">return</span> <span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">);</span>
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>实现NSCoding的自动归档和解档</p>
 
@@ -268,9 +254,7 @@
 <span class="p">}</span> 
 <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="vi">@end</span>
-
- </code></pre></figure>
+<span class="vi">@end</span></code></pre></figure>
 
 <p>字典转模型</p>
 
@@ -283,9 +267,7 @@
 <span class="no">Status</span> <span class="o">*</span><span class="n">status</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">self</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> 
 <span class="p">[</span><span class="n">status</span> <span class="n">setValuesForKeysWithDictionary</span><span class="ss">:dict</span><span class="p">];</span>
 <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>Kvc 转模型必须保证，模型中的属性和字典中的key 一一对应。如果不一致，就报 setvalue forundefinedKey 找不到key</p>
 
@@ -531,9 +513,7 @@ struct objc_object { Class isa; };</p>
 
 <p>7、消息转发</p>
 
-<ul>
-  <li>重定向</li>
-</ul>
+<p>- 重定向</p>
 
 <p>消息转发机制执行前，Runtime 系统允许我们替换消息的接收者为其他对象。通过- (id)forwardingTargetForSelector:(SEL)aSelector  方法。</p>
 
@@ -549,9 +529,7 @@ struct objc_object { Class isa; };</p>
 
 <p>如果此方法返回nil 或者self。则会计入消息转发机制 (forwardInvocation:)  ，否则将向返回的对象重新发送消息</p>
 
-<ul>
-  <li>转发</li>
-</ul>
+<p>- 转发</p>
 
 <p>当动态方法解析不做处理返回NO 时，则会触发消息转发机制。这时，forwardInvocation: 方法会被执行，我们可以重写这个方法来自定义我们的转发逻辑</p>
 
@@ -582,8 +560,7 @@ struct objc_object { Class isa; };</p>
 <p>如果你就是想要别人以为Warrior 继承到了 Diplomat的 negotiate 方法，你得重新实现 respondsToSelector：和 isKindOfClass：来加入你的转发算法
  </p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="o">-</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span><span class="n">respondsToSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">aSelector</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span><span class="n">respondsToSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">aSelector</span>
 <span class="k">if</span> <span class="p">(</span> <span class="p">[</span><span class="k">super</span> <span class="n">respondsToSelector</span><span class="ss">:aSelector</span><span class="p">]</span> <span class="p">)</span>
 <span class="k">return</span> <span class="no">YES</span><span class="p">;</span>
 <span class="k">else</span> <span class="p">{</span>
@@ -591,14 +568,11 @@ struct objc_object { Class isa; };</p>
 * be forwarded to another object and whether that  *
 * object can respond to it. Return YES if it can.  */</span>
 <span class="p">}</span>
-<span class="k">return</span> <span class="no">NO</span><span class="p">;</span> <span class="p">}</span> 
-
- </code></pre></figure>
+<span class="k">return</span> <span class="no">NO</span><span class="p">;</span> <span class="p">}</span> </code></pre></figure>
 
 <p>除了 respondsToSelector:  和  isKindOfClass:  之外，instancesRespondToSelector:  中也应该写一份转发算法，如果使用了协议 conformsToProtocol:  同样也要加入到这一行列中。如果一个对象想要转发他接受的任何远程消息，他得给出一个方法标签来返回准确的方法描述，methodSignatureForSelector：这个方法会最终响应被转发的消息，从而生成一个确定的NSInvocation 对象 描述消息和消息参数，这个方法最中响应被转发的消息。他要像下面这样实现</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="o">-</span> <span class="p">(</span><span class="no">NSMethodSignature</span><span class="o">*</span><span class="p">)</span><span class="n">methodSignatureForSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">selector</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="no">NSMethodSignature</span><span class="o">*</span><span class="p">)</span><span class="n">methodSignatureForSelector</span><span class="p">:(</span><span class="no">SEL</span><span class="p">)</span><span class="n">selector</span>
 <span class="p">{</span>
 <span class="no">NSMethodSignature</span><span class="o">*</span> <span class="n">signature</span> <span class="o">=</span> <span class="p">[</span><span class="k">super</span>
 <span class="n">methodSignatureForSelector</span><span class="ss">:selector</span><span class="p">];</span>
@@ -607,9 +581,7 @@ struct objc_object { Class isa; };</p>
 <span class="n">methodSignatureForSelector</span><span class="ss">:selector</span><span class="p">];</span>
 <span class="p">}</span>
 <span class="k">return</span> <span class="n">signature</span><span class="p">;</span>
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>9、健壮的实例变量</p>
 
@@ -647,8 +619,7 @@ struct objc_object { Class isa; };</p>
 
 <p>关联属性</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="vi">@interface</span> <span class="no">NSObject</span> <span class="p">(</span><span class="nb">test</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@interface</span> <span class="no">NSObject</span> <span class="p">(</span><span class="nb">test</span><span class="p">)</span>
 <span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span> <span class="no">NSString</span> <span class="o">*</span><span class="nb">name</span><span class="p">;</span>
 <span class="vi">@end</span> 
 <span class="p">.</span><span class="nf">m</span> 
@@ -667,9 +638,7 @@ return objc_getAssociatedObject(self, key);
 <span class="sr">//</span> <span class="err">第四个参数</span> <span class="err">：关联的策略</span>
 <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="nb">name</span><span class="p">,</span>
 <span class="no">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span><span class="p">);</span>
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>13、Toll-Free Bridging 是什么，什么情况下会使用？</p>
 
@@ -700,26 +669,20 @@ return objc_getAssociatedObject(self, key);
 
 <p>声明一个weak 属性，这里假设delegate 其实weak 关键字可以不使用，因为我们重写了getter/setter 方法，</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">weak</span><span class="p">)</span> <span class="nb">id</span> <span class="n">delegate</span><span class="p">;</span> 
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">weak</span><span class="p">)</span> <span class="nb">id</span> <span class="n">delegate</span><span class="p">;</span> 
 
 <span class="o">-</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span><span class="n">delegate</span> <span class="p">{</span>
 
 <span class="k">return</span> <span class="n">objc_getAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="err">@</span><span class="s2">"__delegate__key"</span><span class="p">);</span> 
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>指定使用 OBJC_ASSOCIATION_ASSIGN 官方注释 Specifies a weak reference to the associated object</p>
 
 <p>也就是说 对于对象类型，就是weak 了</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">  
-<span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">setDelegate</span><span class="p">:(</span><span class="nb">id</span><span class="p">)</span><span class="n">delegate</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="n">setDelegate</span><span class="p">:(</span><span class="nb">id</span><span class="p">)</span><span class="n">delegate</span> <span class="p">{</span>
 <span class="n">objc_setAssociatedObject</span><span class="p">(</span><span class="nb">self</span><span class="p">,</span> <span class="err">@</span><span class="s2">"__delegate__key"</span><span class="p">,</span> <span class="n">delegate</span><span class="p">,</span> <span class="no">OBJC_ASSOCIATION_ASSIGN</span><span class="p">);</span>
-<span class="p">}</span>
-
- </code></pre></figure>
+<span class="p">}</span></code></pre></figure>
 
 <p>通过 objc_storeWeak 函数来实现，不过这种方式几乎没有遇到过有人这么实用，所以不细说。 </p>
 
@@ -755,13 +718,13 @@ return objc_getAssociatedObject(self, key);
   </section>
 </article>
 
-<section class="read-more">
+<!--<section class="read-more">
    
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
        <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS-Runloop/" title="link to iOS - Runloop">iOS - Runloop</a></h2>
-       <p class="excerpt">RunLoopRunLoop和线程紧密相连。runloop是为了线程而生，没有线程，就没有存在的必要。每个线程，都有与之对应的runloop对象。主线程的runloop默认是开启的。对于其他线程来说，runloop默认是不启动的。如果需要更多的线程交互则可以手动配置和启动。如果线程知识去执行一个长时间的已确定的任务则不需要。int main(int argc,char *argv[]){@autoreleasepool{return UIApplicationMain(argc, argv...&hellip;</p>
+       <p class="excerpt">RunLoopRunLoop和线程紧密相连。runloop 是为了线程而生，没有线程，就没有存在的必要。每个线程，都有与之对应的 runloop 对象。主线程的 runloop 默认是开启的。对于其他线程来说，runloop 默认是不启动的。如果需要更多的线程交互则可以手动配置和启动。如果线程知识去执行一个长时间的已确定的任务则不需要。{% highlight ruby %}int main(int argc,char *argv[]){@autoreleasepool{return UI...&hellip;</p>
        <div class="post-list__meta"><time datetime="2018-04-20 18:04:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS-Runloop/>继续阅读</a></div>
    </div>
    
@@ -770,14 +733,14 @@ return objc_getAssociatedObject(self, key);
    
    <div class="read-more-item">
        <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/" title="link to iOS - 面试题">iOS - 面试题</a></h2>
-       <p class="excerpt">面试题 一基础1、为什么说Objective-C是 动态的语言 ?动态加载：比如2x、3x图片，根据机型动态加载图片动态类型：运行时再决定对象的类型，简单说就是id类型。任何对象都可以被id指针所指，只有在运行时，才能决定是什么类型。像内置的明确的基本类型都属于静态类型 （int NSString等），静态类型在编译的时候就能被识别出来，所以，若程序发生了类型不对应，编译器就会发出警告。而动态类型就编译器编译的时候是不能被识别的，要等到运行时(runtime)，即程序运行的时候才会根据语境...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2018-04-20 11:34:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS%E9%9D%A2%E8%AF%95%E9%A2%98/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="link to iOS - 内存管理">iOS - 内存管理</a></h2>
+       <p class="excerpt">1、内存中五大区域栈区（stack）：储存局部变量、函数的参数值，当期作用域执行完毕之后，就会被系统立即收回，由编译器自动分配释放，其操作方式类似于数据结构中的栈，栈内存分配运算内置于指令集，效率很高，但是分配的内存容量有限，比如iOS中栈区的大小是2M。堆区（heap）：（就是通过new、malloc、realloc 分配的内存块，他们的释放编译器不去管，有我们的引用程序去释放，如果应用程序没有释放掉，操作系统会自动回收，分配方式类似于链表）存放OC对象，手动申请的空间，手动释放（ARC...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-20 10:41:00 +0900" class="post-list__meta--date date">2018-04-20</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/>继续阅读</a></div>
    </div>
    
 </section>
-
-<section class="post-comments">
+-->
+<!--<section class="post-comments">
   
     <div id="disqus_thread"></div>
     <script>
@@ -803,13 +766,14 @@ return objc_getAssociatedObject(self, key);
   
   
 </section>
-
+-->
 
             <section class="footer">
     <footer>
-    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-20 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
-        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+        <span>革命尚未成功，同志仍需努力</span>
+<!--        <span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>-->
+<!--        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-04-27 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>-->
+<!--        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>-->
     </footer>
 </section>
 
