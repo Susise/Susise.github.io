@@ -3,7 +3,7 @@ title: Susise
 subtitle: To be the one that you want to be
 #welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">Download the theme</a>
 description: Love.Action.Hope.
-creator: <a href="http://onev.cat">@onevcat</a>
+#creator: <a href="http://onev.cat">@onevcat</a>
 
 url: "http://susise.github.io"
 
@@ -13,7 +13,7 @@ permalink: /:year/:month/:title/
 highlighter: rouge
 
 # supported colors: blue, green, purple, red, orange or slate. If you need clear, leave it empty.
-cover_color: red
+cover_color: black
 
 # The blog button should not be removed.
 blog_button:
