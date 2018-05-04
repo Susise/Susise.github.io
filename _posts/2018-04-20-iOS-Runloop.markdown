@@ -15,15 +15,10 @@ RunLoop和线程紧密相连。`runloop` 是为了线程而生，没有线程，
 int main(int argc,char *argv[]){
 
 @autoreleasepool{
-
 return UIApplicationMain(argc, argv,nil,NSStringFromClass([appDelegateclass]));
-
 }
-
 }
-
- {% endhighlight %}
-
+{% endhighlight %}
 
 `UIApplicationMain()` 函数，这个方法会为 `main thread` 设置一个 `NSRunLoop` 对象。应用无人操作的时候休息，让他干活的时候能立马响应。
 
@@ -58,7 +53,7 @@ CFRunLoopGetMain(); // 获得主线程的RunLoop对象  
 
 [NSRunLoop currentRunLoop]; // 这个方法是懒加载
 
- {% endhighlight %}
+{% endhighlight %}
 
 二、RunLoop 相关类
 
@@ -76,7 +71,7 @@ CFRunLoopTimerRef
 
 CFRunLoopObserverRef
 
- {% endhighlight %}
+{% endhighlight %}
 
 1、CFRunLoopModeRef 
 
@@ -98,7 +93,7 @@ GSEventReceiveRunLoopMode 接受系统事件的内部Mode，通常用不到，
 
 KCFRunLoopCommonModes 这是一个占位用的 Mode，不是一种真正的Mode
 
- {% endhighlight %}
+{% endhighlight %}
 
 详细见代码：四种倒计时方式  [RunLoop] 
 
@@ -119,7 +114,15 @@ CFRunLoopObserverRef 是观察者，能狗监听RunLoop 的状态改变。可以
 
 可以监测Timer
 
-三、runloop的使用 详细见代码 [RunLoop]
+三、CoreFoundation 的内存个管理
+
+1 、凡是带有Create、Copy、Retain等字眼的函数，创建出来的对象，都需要在最后做一次release
+    比如CFRunLoopObserverCreate
+![图片](/assets/images/iOS/runloop3.png)  
+
+![图片](/assets/images/iOS/runloop2.png)  
+
+四、runloop的使用 详细见代码 [RunLoop]
 
 1、NSTimer 
 

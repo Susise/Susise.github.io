@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>iOS-Insturements 的使用</title>
+  <meta name="description" content="Analyze 静态分析">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="iOS-Insturements 的使用">
+  <meta name="twitter:description" content="Analyze 静态分析">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="iOS-Insturements 的使用">
+  <meta property="og:description" content="Analyze 静态分析">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/05/iOS-Insturements%E7%9A%84%E4%BD%BF%E7%94%A8/">
+  <link rel="alternate" type="application/rss+xml" title="Susise" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Susise 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Susise logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Susise" class="blog-button">Susise</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">To be the one that you want to be</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">Love.Action.Hope.</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+                  <li class="navigation__item"><a href="https://github.com/Susise" target="_blank" title="My Projects">Projects</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+  <!-- Weibo -->
+  <li class="navigation__item">
+    <a href="http://weibo.com/p/1005055503228222" title="@p/1005055503228222 的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li>
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/Susise" title="@Susise 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:s_qiaoqiao@163.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-black"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-05-03 14:32:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-05-03</time> &#8226; <span class="post-meta__tags tags"></span>
+    </div>
+    <h1 class="post-title">iOS-Insturements 的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>Analyze 静态分析</p>
+
+<p>它让你可以跟踪一个或多个进程</p>
+
+<p>应用程序性能分析。在开始进行应用程序性能分析的时候,一定要使用真机,模拟器运行在Mac上，然而Mac上的CPU往往比iOS设备要快</p>
+
+<p>另外在开始性能分析前另外一件重要的事情是，应用程序运行一定要发布配置 而不是调试配置. Release。</p>
+
+<p><a href="https://www.jianshu.com/p/f87455e47da1">链接1</a>、<a href="http://www.cocoachina.com/ios/20150225/11163.html">链接2</a>、<a href="http://www.cocoachina.com/special/20161013/17759.html">链接3</a> Leaks</p>
+
+<p>Undefined symbols for architecture i386:  “<em>OBJC_CLASS</em>$_JPUSHService”, referenced from:  objc-class-ref in AppDelegate.o</p>
+
+<p>意思是无法找到 名为  JPUSHService 的类，进而还会导致一个无法连接的一个报错，没有这个类，添加这个类</p>
+
+<p>选择项目文件 ，选择 Build Phases，选择 Compile Sources，添加 XXX.m 类（切记，添加的是.m文件）</p>
+
+<p>第二种，还有一些 第三方库不在支持 “从3.0.0版本开始不再支持i386模拟器”</p>
+
+<p>2.Time Profiler</p>
+
+<p>选择Time Profiler启动.</p>
+
+<p>分析代码的执行时间，可以找出程序变慢的原因</p>
+
+<p>time profile时间分析工具用来检测应用CPU的使用情况.可以看到应用程序中各个方法正在消耗CPU时间.使用大量CPU不一定是个问题.类似我们客户端中不同场景的天气动画[类似大雨]的路径就对CPU依赖就非常高，动画本身也是非常苛刻且耗费资源较多的任务.</p>
+
+<p>3.Leaks</p>
+
+<p>监控内存泄漏</p>
+
+<p>一般的措施内存使用情况，检查泄漏的内存，并提供了所有活动的分配和泄漏模块的类对象分配统计信息以及内存地址历史记录。用大白话来说，就是调查程序内存泄露的具体内容，比如泄露的内存地址、哪段代码内存泄露，泄露的内存大小……</p>
+
+<p><img src="/assets/images/iOS/Insturements1.png" alt="图片" />
+  
+<img src="/assets/images/iOS/Insturements2.png" alt="图片" /></p>
+
+<p><img src="/assets/images/iOS/Insturements3.png" alt="图片" /></p>
+
+<p><img src="/assets/images/iOS/Insturements4.png" alt="图片" /></p>
+
+<p>在下面call Tree 里面选择。反向调用树、按线程做分析、隐藏系统库文件，过滤各种系统库调用
+4.Allocations</p>
+
+<p>监测内存分布情况</p>
+
+<p>在 Xcode 中, 共提供了两种工具帮助查找泄漏点</p>
+
+<p>1 &gt; Analyze command + shift + B</p>
+
+<p>- 学 名:  静态分析工具- 查 找:  可以通过 Product -&gt;Analyze 菜单项启动- 快捷键:  CMD+shift +b.- Analyze主要分析以下四种问题:
+1) 逻辑错误：访问空指针或未初始化的变量等；
+2) 内存管理错误：如内存泄漏等；
+3) 声明错误：从未使用过的变量；
+4) Api调用错误：未包含使用的库和框架</p>
+
+<p>2 &gt;Instruments
+- 学 名: 动态分析工具- 查 找:   Product -&gt;Profile 菜单项启动- 快捷键:  CMD + i.- 简 介:它有很多跟踪模块可以动态分析和跟踪内存, CPU 和文件系统.</p>
+
+<p><a href="http://www.cocoachina.com/special/20161013/17759.html">链接4</a></p>
+
+<p>内存溢出</p>
+
+<p>指程序在申请内存时候，没有足够的内存空间供其使用，出现 out of memory，比如申请了 一个integer 但是他存了 long 才能存下的数，这就是内存溢出</p>
+
+<p>在xcode 里面也可以查看内存使用情况</p>
+
+<p><img src="/assets/images/iOS/Insturements5.png" alt="图片" /></p>
+
+<p>内存空间的划分：</p>
+
+<p>一个进程占用的内存空间 包括不同的5种数据区：</p>
+
+<p>1、BSS段，通常是存放未初始化的全局变量</p>
+
+<p>2、数据段 通常是存放已初始化的全局变量</p>
+
+<p>3、代码段 通常是存放程序执行代码</p>
+
+<p>4、堆  通常是用于存放进程运行中 被动态分配的内存段 OC对象 （所有继承自NSObject的对象 ）就存放在堆里</p>
+
+<p>5、栈 由编译器自动分配释放，存放函数的参数值</p>
+
+<p>4.Core Animation FPS</p>
+
+<p>在性能优化中一个最具参考价值的属性是FPS。Frames Per second，其实就是屏幕刷新率，苹果的iPhone推荐的刷新率是 60 Hz。也就是说GPU每秒钟刷新屏幕 60次，这每刷新一次就是一帧的frame，FPS 也就是每秒钟刷新多少帧画面。静止不变的页面FPS 值是 0，这个值没有参考意义，当地狱45的时候卡顿会比较明显</p>
+
+<p>注意点，</p>
+
+<p>测试使用真机调试</p>
+
+<p>最好使用release包测试，release 是发布版本，苹果会在release 包中做很多优化工作，因此用release包测试出来的性能才是最真实的。</p>
+
+<p><img src="/assets/images/iOS/Insturements6.png" alt="图片" /></p>
+
+<p>关于Core  Animation FPS 一个不错的 <a href="https://www.jianshu.com/p/a93375df8547">博客</a></p>
+
+<p>5、Activity Monitor 
+个人觉的很像Windows的任务管理器，可以查看所有的进程，以及进程的内存、cpu使用百分比等数据等，就不多介绍了，打开一看大概就知道怎么回事</p>
+
+<p>UIScreen.main.scale。设备的自然分辨率</p>
+
+<p>scale = 1; 的时候是代表当前设备是320<em>480的分辨率（就是iphone4之前的设备）
+scale = 2; 的时候是代表分辨率为640</em>960的分辨率</p>
+
+<p><a href="https://blog.csdn.net/u010545480/article/details/48707411?locationNum=4&amp;fps=1">判断屏幕的分辨率</a></p>
+
+<p><img src="/assets/images/iOS/Insturements7.png" alt="图片" /></p>
+
+<p>其实，[[UIScreen mainScreen] scale]是计算屏幕分辨率的喔。
+[[UIScreen main] scale] == 1; //代表320 x 480 的分辨率
+[[UIScreen main] scale] == 2; //代表640 x 960 的分辨率
+[[UIScreen main] scale] == 3; //代表1242 x 2208 的分辨率</p>
+
+<p>6、 真机调试</p>
+
+<p>Color Blended Layer  （混合过度绘制）</p>
+
+<p>Color Copied Images (拷贝的图片)</p>
+
+<p>Color Misaligned Images (图片对齐方式)</p>
+
+<p>Color Offscreen - Rendered</p>
+
+<p><img src="/assets/images/iOS/Insturements8.png" alt="图片" /></p>
+
+
+  </section>
+</article>
+
+<!--<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/04/iOS-%E5%85%B3%E4%BA%8E%E6%8E%A8%E9%80%81/" title="link to iOS-关于推送">iOS-关于推送</a></h2>
+       <p class="excerpt">iOS10引入了新的框架UserNotification.framework。除了整合之前推送模块的API，增加了新功能，比如撤销通知，更新通知内容，通知可展示的图片视频，还可以自定义通知UI，&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-04-25 15:02:00 +0900" class="post-list__meta--date date">2018-04-25</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2018/04/iOS-%E5%85%B3%E4%BA%8E%E6%8E%A8%E9%80%81/>继续阅读</a></div>
+   </div>
+   
+</section>
+-->
+<!--<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2018/05/iOS-Insturements%E7%9A%84%E4%BD%BF%E7%94%A8/";
+        this.page.identifier = "/2018/05/iOS-Insturements%E7%9A%84%E4%BD%BF%E7%94%A8/";
+    };
+
+    var disqus_shortname = 'vno-jekyll';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+-->
+
+            <section class="footer">
+    <footer>
+        <span>革命尚未成功，同志仍需努力</span>
+<!--        <span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>-->
+<!--        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-05-03 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>-->
+<!--        <span class="footer__copyright">本站采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>-->
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
